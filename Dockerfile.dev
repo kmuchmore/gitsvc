@@ -1,0 +1,16 @@
+#syntax=docker/dockerfile:experimental
+
+FROM golang:latest as go
+FROM node:latest
+
+COPY --from=go /usr/local/go /usr/local/go
+ENV GOPATH /go
+ENV PATH /usr/local/go/bin:$GOPATH/bin:$PATH
+ENV GOTOOLCHAIN=local
+
+RUN rm -f /etc/apt/apt.conf.d/docker-clean
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update; \
+    apt-get install -yqq --no-install-recommends \
+    wget xz-utils iputils-ping; \
+    rm -rf /var/lib/apt/lists/*

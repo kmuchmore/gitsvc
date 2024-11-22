@@ -1,0 +1,14 @@
+services:
+  dev:
+    image: golang:dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/code
+    working_dir: /code
+    security_opt:
+      - seccomp:unconfined
+    expose:
+      - "8080"
+    command: bash -c "sleep infinity"
